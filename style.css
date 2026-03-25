@@ -69,3 +69,31 @@ button:hover {
     font-weight: bold;
     color: #fff;
 }
+
+.pool-container {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pool-column {
+    flex: 1;
+}
+
+.pool-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.pool-card {
+    background: #1a1f29;
+    border: 1px solid #444;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: left;
+}
+
+.faction-card { border-left: 4px solid #00f2ff; }
+.slice-card { border-left: 4px solid #ff00ff; }
