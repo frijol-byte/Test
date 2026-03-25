@@ -43,13 +43,16 @@
 
     // This "listens" for the click and runs the code safely
     document.getElementById('btnDraft').addEventListener('click', () => {
-        const config = {
-            numPlayers: parseInt(document.getElementById('playerCount').value) || 6,
-            maxComplexity: parseInt(document.getElementById('complexity').value) || 3,
-            expansions: ["Base", "PoK", "Discordant", "Thunder's Edge"],
-            minRes: 4, maxRes: 9, minInf: 4, maxInf: 9
-        };
+        document.getElementById('btnDraft').addEventListener('click', () => {
+    // Grab checked expansions
+    const selectedExpansions = Array.from(document.querySelectorAll('.exp-check:checked'))
+                                    .map(cb => cb.value);
 
+    const config = {
+        numPlayers: parseInt(document.getElementById('playerCount').value),
+        maxComplexity: parseInt(document.getElementById('complexity').value),
+        expansions: selectedExpansions, // Dynamic from checkboxes
+        minRes: 4, maxRes: 9, minInf: 4, maxInf: 9
         try {
             const factions = pickFactions(config);
             const galaxy = generateGalaxy(config);
@@ -60,21 +63,37 @@
         }
     });
 
-    function renderResults(draftPool) {
+    function renderResults(pool) {
     const area = document.getElementById('displayArea');
-    area.innerHTML = `
+    
+    // Create the Draft Order header
+    let html = `
+        <div class="draft-order-banner">
+            <strong>Draft Order:</strong> ${pool.draftOrder.map(p => `Player ${p}`).join(' ➔ ')}
+        </div>
         <div class="pool-container">
             <div class="pool-column">
-                <h2>Available Factions</h2>
-                <div id="factionPool" class="pool-grid"></div>
+                <h2>Factions</h2>
+                <div class="pool-grid">${pool.factions.map(f => `
+                    <div class="pool-card faction-card"><strong>${f.name}</strong><br><small>${f.expansion}</small></div>
+                `).join('')}</div>
             </div>
             <div class="pool-column">
-                <h2>Available Slices</h2>
-                <div id="slicePool" class="pool-grid"></div>
+                <h2>Slices</h2>
+                <div class="pool-grid">${pool.slices.map((s, i) => `
+                    <div class="pool-card slice-card"><strong>Slice ${i+1}</strong><br><small>R:${s.stats.res} I:${s.stats.inf}</small></div>
+                `).join('')}</div>
+            </div>
+            <div class="pool-column">
+                <h2>Positions</h2>
+                <div class="pool-grid">${pool.positions.map(p => `
+                    <div class="pool-card pos-card"><strong>${p}</strong></div>
+                `).join('')}</div>
             </div>
         </div>
     `;
-
+    area.innerHTML = html;
+}
     // Populate Factions
     const fPool = document.getElementById('factionPool');
     draftPool.factions.forEach(f => {
