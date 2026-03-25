@@ -1,120 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TI4 Galactic Drafter</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>TI4 Galactic Drafter</h1>
-        
-        <div class="setup-panel">
-            <div class="setting">
-                <label>Players:</label>
-                <input type="number" id="playerCount" value="6" min="2" max="8">
-            </div>
-            <div class="setting">
-                <label>Max Complexity:</label>
-                <select id="complexity">
-                    <option value="1">1 (Easy)</option>
-                    <option value="2">2 (Medium)</option>
-                    <option value="3" selected>3 (Hard)</option>
-                </select>
-            </div>
-            <div class="expansions">
-                <label><input type="checkbox" class="exp-check" value="Base" checked> Base</label>
-                <label><input type="checkbox" class="exp-check" value="PoK" checked> PoK</label>
-                <label><input type="checkbox" class="exp-check" value="Discordant" checked> Discordant</label>
-                <label><input type="checkbox" class="exp-check" value="Thunder's Edge" checked> Thunder's Edge</label>
-            </div>
-            <button id="btnDraft">Initialize Draft</button>
-        </div>
-
-        <div id="displayArea" class="results-grid">
-            </div>
-    </div>
-
-    <script type="module" src="app.js"></script>
-
-<script type="module">
-    import { pickFactions, generateGalaxy } from './app.js';
-
-    // This "listens" for the click and runs the code safely
-    document.getElementById('btnDraft').addEventListener('click', () => {
-        document.getElementById('btnDraft').addEventListener('click', () => {
-    // Grab checked expansions
-    const selectedExpansions = Array.from(document.querySelectorAll('.exp-check:checked'))
-                                    .map(cb => cb.value);
-
-    const config = {
-        numPlayers: parseInt(document.getElementById('playerCount').value),
-        maxComplexity: parseInt(document.getElementById('complexity').value),
-        expansions: selectedExpansions, // Dynamic from checkboxes
-        minRes: 4, maxRes: 9, minInf: 4, maxInf: 9
-        try {
-            const factions = pickFactions(config);
-            const galaxy = generateGalaxy(config);
-            renderResults(factions, galaxy);
-        } catch (err) {
-            console.error(err);
-            alert("Error: " + err.message);
+    <title>Index Page</title>
+    <script>
+        function displayMessage() {
+            console.log('Hello, World!');
         }
-    });
-
-    function renderResults(pool) {
-    const area = document.getElementById('displayArea');
-    
-    // Create the Draft Order header
-    let html = `
-        <div class="draft-order-banner">
-            <strong>Draft Order:</strong> ${pool.draftOrder.map(p => `Player ${p}`).join(' ➔ ')}
-        </div>
-        <div class="pool-container">
-            <div class="pool-column">
-                <h2>Factions</h2>
-                <div class="pool-grid">${pool.factions.map(f => `
-                    <div class="pool-card faction-card"><strong>${f.name}</strong><br><small>${f.expansion}</small></div>
-                `).join('')}</div>
-            </div>
-            <div class="pool-column">
-                <h2>Slices</h2>
-                <div class="pool-grid">${pool.slices.map((s, i) => `
-                    <div class="pool-card slice-card"><strong>Slice ${i+1}</strong><br><small>R:${s.stats.res} I:${s.stats.inf}</small></div>
-                `).join('')}</div>
-            </div>
-            <div class="pool-column">
-                <h2>Positions</h2>
-                <div class="pool-grid">${pool.positions.map(p => `
-                    <div class="pool-card pos-card"><strong>${p}</strong></div>
-                `).join('')}</div>
-            </div>
-        </div>
-    `;
-    area.innerHTML = html;
-}
-    // Populate Factions
-    const fPool = document.getElementById('factionPool');
-    draftPool.factions.forEach(f => {
-        const div = document.createElement('div');
-        div.className = 'pool-card faction-card';
-        div.innerHTML = `<strong>${f.name}</strong><br><small>${f.expansion}</small>`;
-        fPool.appendChild(div);
-    });
-
-    // Populate Slices
-    const sPool = document.getElementById('slicePool');
-    draftPool.slices.forEach((s, index) => {
-        const div = document.createElement('div');
-        div.className = 'pool-card slice-card';
-        div.innerHTML = `
-            <strong>Slice ${index + 1}</strong><br>
-            <small>Res: ${s.stats.res} | Inf: ${s.stats.inf}</small>
-        `;
-        sPool.appendChild(div);
-    });
-}
-</script>
+    </script>
+</head>
+<body onload="displayMessage()">
+    <h1>Welcome to the Index Page</h1>
 </body>
 </html>
