@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TI4 Galactic Drafter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>TI4 Galactic Drafter</h1>
+        
+        <div class="setup-panel">
+            <div class="setting">
+                <label>Players:</label>
+                <input type="number" id="playerCount" value="6" min="2" max="8">
+            </div>
+            <div class="setting">
+                <label>Max Complexity:</label>
+                <select id="complexity">
+                    <option value="1">1 (Easy)</option>
+                    <option value="2">2 (Medium)</option>
+                    <option value="3" selected>3 (Hard)</option>
+                </select>
+            </div>
+            <button id="btnDraft">Initialize Draft</button>
+        </div>
+
+        <div id="displayArea" class="results-grid">
+            </div>
+    </div>
+
+    <script type="module">
+        import { pickFactions, generateGalaxy } from './app.js';
+
+        document.getElementById('btnDraft').addEventListener('click', () => {
+            const config = {
+                numPlayers: parseInt(document.getElementById('playerCount').value),
+                maxComplexity: parseInt(document.getElementById('complexity').value),
+                expansions: ["Base", "PoK", "Discordant", "Thunder's Edge"],
+                minRes: 4, maxRes: 9, minInf: 4, maxInf: 9
+            };
+
+            try {
+                const factions = pickFactions(config);
+                const galaxy = generateGalaxy(config);
+                renderResults(factions, galaxy);
+            } catch (err) {
+                alert(err.message);
+            }
+        });
+
+        function renderResults(factions, galaxy) {
+            const area = document.getElementById('displayArea');
+            area.innerHTML = ''; // Clear old results
+
+            factions.forEach((f, i) => {
+                const slice = galaxy ? galaxy[i] : null;
+                const card = document.createElement('div');
+                card.className = 'player-card';
+                card.innerHTML = `
+                    <h3>Player ${i + 1}</h3>
+                    <div class="faction-name">${f.name}</div>
+                    <small>${f.expansion} (C:${f.complexity})</small>
+                    <hr>
+                    <p><strong>Resources:</strong> ${slice ? slice.stats.res : 'N/A'}</p>
+                    <p><strong>Influence:</strong> ${slice ? slice.stats.inf : 'N/A'}</p>
+                `;
+                area.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>

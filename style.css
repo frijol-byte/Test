@@ -1,0 +1,71 @@
+body {
+    background-color: #0b0e14;
+    color: #00f2ff;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    width: 100%;
+    text-align: center;
+}
+
+h1 {
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    border-bottom: 2px solid #00f2ff;
+    padding-bottom: 10px;
+}
+
+.setup-panel {
+    background: #1a1f29;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    background: #00f2ff;
+    color: #0b0e14;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+button:hover {
+    background: #fff;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.player-card {
+    background: #1a1f29;
+    border: 1px solid #333;
+    padding: 15px;
+    border-radius: 10px;
+    transition: transform 0.2s;
+}
+
+.player-card:hover {
+    transform: scale(1.05);
+    border-color: #00f2ff;
+}
+
+.faction-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #fff;
+}
