@@ -54,25 +54,42 @@
         }
     });
 
-    function renderResults(factions, galaxy) {
-        const area = document.getElementById('displayArea');
-        area.innerHTML = ''; 
+    function renderResults(draftPool) {
+    const area = document.getElementById('displayArea');
+    area.innerHTML = `
+        <div class="pool-container">
+            <div class="pool-column">
+                <h2>Available Factions</h2>
+                <div id="factionPool" class="pool-grid"></div>
+            </div>
+            <div class="pool-column">
+                <h2>Available Slices</h2>
+                <div id="slicePool" class="pool-grid"></div>
+            </div>
+        </div>
+    `;
 
-        factions.forEach((f, i) => {
-            const slice = galaxy ? galaxy[i] : null;
-            const card = document.createElement('div');
-            card.className = 'player-card';
-            card.innerHTML = `
-                <h3>Player ${i + 1}</h3>
-                <div class="faction-name">${f.name}</div>
-                <small>${f.expansion} (Complexity: ${f.complexity})</small>
-                <hr>
-                <p><strong>Resources:</strong> ${slice ? slice.stats.res : 'N/A'}</p>
-                <p><strong>Influence:</strong> ${slice ? slice.stats.inf : 'N/A'}</p>
-            `;
-            area.appendChild(card);
-        });
-    }
+    // Populate Factions
+    const fPool = document.getElementById('factionPool');
+    draftPool.factions.forEach(f => {
+        const div = document.createElement('div');
+        div.className = 'pool-card faction-card';
+        div.innerHTML = `<strong>${f.name}</strong><br><small>${f.expansion}</small>`;
+        fPool.appendChild(div);
+    });
+
+    // Populate Slices
+    const sPool = document.getElementById('slicePool');
+    draftPool.slices.forEach((s, index) => {
+        const div = document.createElement('div');
+        div.className = 'pool-card slice-card';
+        div.innerHTML = `
+            <strong>Slice ${index + 1}</strong><br>
+            <small>Res: ${s.stats.res} | Inf: ${s.stats.inf}</small>
+        `;
+        sPool.appendChild(div);
+    });
+}
 </script>
 </body>
 </html>
