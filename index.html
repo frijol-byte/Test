@@ -30,45 +30,47 @@
             </div>
     </div>
 
-    <script type="module">
-        import { pickFactions, generateGalaxy } from './app.js';
+    <script type="module" src="app.js">
+    import { pickFactions, generateGalaxy } from './app.js';
 
-        document.getElementById('btnDraft').addEventListener('click', () => {
-            const config = {
-                numPlayers: parseInt(document.getElementById('playerCount').value),
-                maxComplexity: parseInt(document.getElementById('complexity').value),
-                expansions: ["Base", "PoK", "Discordant", "Thunder's Edge"],
-                minRes: 4, maxRes: 9, minInf: 4, maxInf: 9
-            };
+    // This "listens" for the click and runs the code safely
+    document.getElementById('btnDraft').addEventListener('click', () => {
+        const config = {
+            numPlayers: parseInt(document.getElementById('playerCount').value) || 6,
+            maxComplexity: parseInt(document.getElementById('complexity').value) || 3,
+            expansions: ["Base", "PoK", "Discordant", "Thunder's Edge"],
+            minRes: 4, maxRes: 9, minInf: 4, maxInf: 9
+        };
 
-            try {
-                const factions = pickFactions(config);
-                const galaxy = generateGalaxy(config);
-                renderResults(factions, galaxy);
-            } catch (err) {
-                alert(err.message);
-            }
-        });
-
-        function renderResults(factions, galaxy) {
-            const area = document.getElementById('displayArea');
-            area.innerHTML = ''; // Clear old results
-
-            factions.forEach((f, i) => {
-                const slice = galaxy ? galaxy[i] : null;
-                const card = document.createElement('div');
-                card.className = 'player-card';
-                card.innerHTML = `
-                    <h3>Player ${i + 1}</h3>
-                    <div class="faction-name">${f.name}</div>
-                    <small>${f.expansion} (C:${f.complexity})</small>
-                    <hr>
-                    <p><strong>Resources:</strong> ${slice ? slice.stats.res : 'N/A'}</p>
-                    <p><strong>Influence:</strong> ${slice ? slice.stats.inf : 'N/A'}</p>
-                `;
-                area.appendChild(card);
-            });
+        try {
+            const factions = pickFactions(config);
+            const galaxy = generateGalaxy(config);
+            renderResults(factions, galaxy);
+        } catch (err) {
+            console.error(err);
+            alert("Error: " + err.message);
         }
-    </script>
+    });
+
+    function renderResults(factions, galaxy) {
+        const area = document.getElementById('displayArea');
+        area.innerHTML = ''; 
+
+        factions.forEach((f, i) => {
+            const slice = galaxy ? galaxy[i] : null;
+            const card = document.createElement('div');
+            card.className = 'player-card';
+            card.innerHTML = `
+                <h3>Player ${i + 1}</h3>
+                <div class="faction-name">${f.name}</div>
+                <small>${f.expansion} (Complexity: ${f.complexity})</small>
+                <hr>
+                <p><strong>Resources:</strong> ${slice ? slice.stats.res : 'N/A'}</p>
+                <p><strong>Influence:</strong> ${slice ? slice.stats.inf : 'N/A'}</p>
+            `;
+            area.appendChild(card);
+        });
+    }
+</script>
 </body>
 </html>
