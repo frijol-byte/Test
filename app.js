@@ -1,6 +1,34 @@
 import { FACTIONS, SYSTEMS, ANOMALIES } from './data.js';
 
 /**
+ * Creates a shared pool for a Milty-style draft
+ */
+export function createDraftPool(config) {
+    const { numPlayers, numFactionsInPool, numSlicesInPool, maxComplexity, expansions } = config;
+
+    // 1. Get Faction Pool
+    const eligibleFactions = FACTIONS.filter(f => 
+        expansions.includes(f.expansion) && 
+        f.complexity <= maxComplexity
+    );
+    const factionPool = shuffle(eligibleFactions).slice(0, numFactionsInPool);
+
+    // 2. Get Slice Pool (using your existing galaxy logic)
+    // We generate more slices than players so there are choices left for the last person
+    let slicePool = [];
+    let attempts = 0;
+    while (slicePool.length < numSlicesInPool && attempts < 20000) {
+        const potentialGalaxy = generateGalaxy({ ...config, numPlayers: 1 }); // Generate 1 slice at a time
+        if (potentialGalaxy) {
+            slicePool.push(potentialGalaxy[0]);
+        }
+        attempts++;
+    }
+
+    return { factions: factionPool, slices: slicePool };
+}
+
+/**
  * Utility to shuffle an array (Fisher-Yates algorithm)
  */
 function shuffle(array) {
